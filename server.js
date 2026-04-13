@@ -1,16 +1,18 @@
 const express = require("express");
 const cors = require("cors");
 
-// ✅ fetch compatível
-const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
-
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-// ✅ serve arquivos da raiz
-app.use(express.static(__dirname));
+// 🔥 SERVE A PASTA PUBLIC
+app.use(express.static("public"));
+
+// 🔥 GARANTE QUE A HOME ABRA
+app.get("/", (req, res) => {
+  res.sendFile(__dirname + "/public/index.html");
+});
 
 const PORT = process.env.PORT || 3000;
 
@@ -120,5 +122,5 @@ app.post("/traduzir-palavra", async (req,res)=>{
 ========================= */
 
 app.listen(PORT, () => {
-  console.log(`App rodando na porta ${PORT}`);
+  console.log(`🚀 App rodando na porta ${PORT}`);
 });
