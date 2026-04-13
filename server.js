@@ -1,12 +1,18 @@
 const express = require("express");
 const cors = require("cors");
 
+// ✅ fetch compatível
+const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
+
 const app = express();
+
 app.use(cors());
 app.use(express.json());
-app.use(express.static("public"));
 
-const PORT = 3000;
+// ✅ serve arquivos da raiz
+app.use(express.static(__dirname));
+
+const PORT = process.env.PORT || 3000;
 
 /* =========================
    TRADUÇÃO DE FRASES
@@ -43,17 +49,13 @@ app.post("/traduzir", async (req, res) => {
     let source, target, idiomaDetectado;
 
     if(contador >= 1){
-
       source = "en";
       target = "pt";
       idiomaDetectado = "en";
-
     }else{
-
       source = "pt";
       target = "en";
       idiomaDetectado = "pt";
-
     }
 
     const url =
@@ -118,5 +120,5 @@ app.post("/traduzir-palavra", async (req,res)=>{
 ========================= */
 
 app.listen(PORT, () => {
-  console.log(`App rodando em http://localhost:${PORT}`);
+  console.log(`App rodando na porta ${PORT}`);
 });
